@@ -1,5 +1,6 @@
 import hashlib
 import random
+from helper_functions import sbox1, sbox2, sbox3, sbox4, sbox5, sbox6, sbox7, sbox8
 
 
 # Each step of this process is demonstrated in the output
@@ -73,7 +74,7 @@ def inv_IP_table(IP_tabs):
 #the segment into that position in a list, this scrambled segment is then broken back up into 8 32 bits 
 #segments and outputed
 
-def permutations(segments):
+def permutations(segments, user):
 
     #creating the 4 64 bit segments
     permu_pairs = [(0,2), (1,3), (4,6), (5,7)]
@@ -149,7 +150,7 @@ def hash_segmentation_input(blocks):
 # are then each run through a different permutation tables (same ones as from key_generation)
 # as to "scramble" the bits into rnadomized positons found, in the IP tables
 # and then broken back up into 8 32 bits segments and outputed
-def permutation_input(segments, inv = None):
+def permutation_input(segments, user, inv = None):
 
     # create 32 bit segments
     joint_segs = []
@@ -252,7 +253,7 @@ def expansion(key_segs):
 
 
 
-# this is a help function that performs the xor operation on 2 binary string inputs
+# this function performs the xor operation on 2 binary string inputs
 def xor_op(x, y):
     xor_bits = ''.join(['1' if x[i] != y[i] else '0' for i in range(len(x))]) 
     return xor_bits
@@ -290,50 +291,6 @@ def fortyeight_to_six_segs(forty_eight_segs):
         six_bit_segs += [segments_seg]
     return six_bit_segs
 
-# Here we have pre created our S-Boxes as used in 
-#from https://github.com/anishLearnsToCode/DES/blob/master/notebook/data-encryption-standard-des.ipynb
-# These s-boxes will be used on these 48 bits segments, and will be explained via
-# the following functions and do not change between users
-
-sbox1 = [[14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7],
-        [0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8],
-        [4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0],
-        [15, 12, 8, 2, 4, 9, 1, 7, 5, 11, 3, 14, 10, 0, 6, 13]]
-    
-sbox2 = [[15, 1, 8, 14, 6, 11, 3, 4, 9, 7, 2, 13, 12, 0, 5, 10],
-        [3, 13, 4, 7, 15, 2, 8, 14, 12, 0, 1, 10, 6, 9, 11, 5],
-        [0, 14, 7, 11, 10, 4, 13, 1, 5, 8, 12, 6, 9, 3, 2, 15],
-        [13, 8, 10, 1, 3, 15, 4, 2, 11, 6, 7, 12, 0, 5, 14, 9]]
-
-sbox3 = [[10, 0, 9, 14, 6, 3, 15, 5, 1, 13, 12, 7, 11, 4, 2, 8],
-        [13, 7, 0, 9, 3, 4, 6, 10, 2, 8, 5, 14, 12, 11, 15, 1],
-        [13, 6, 4, 9, 8, 15, 3, 0, 11, 1, 2, 12, 5, 10, 14, 7],
-        [1, 10, 13, 0, 6, 9, 8, 7, 4, 15, 14, 3, 11, 5, 2, 12]]
-
-sbox4 = [[7, 13, 14, 3, 0, 6, 9, 10, 1, 2, 8, 5, 11, 12, 4, 15],
-        [13, 8, 11, 5, 6, 15, 0, 3, 4, 7, 2, 12, 1, 10, 14, 9],
-        [10, 6, 9, 0, 12, 11, 7, 13, 15, 1, 3, 14, 5, 2, 8, 4],
-        [3, 15, 0, 6, 10, 1, 13, 8, 9, 4, 5, 11, 12, 7, 2, 14]]
-
-sbox5 = [[2, 12, 4, 1, 7, 10, 11, 6, 8, 5, 3, 15, 13, 0, 14, 9],
-        [14, 11, 2, 12, 4, 7, 13, 1, 5, 0, 15, 10, 3, 9, 8, 6],
-        [4, 2, 1, 11, 10, 13, 7, 8, 15, 9, 12, 5, 6, 3, 0, 14],
-        [11, 8, 12, 7, 1, 14, 2, 13, 6, 15, 0, 9, 10, 4, 5, 3]]
-
-sbox6 = [[12, 1, 10, 15, 9, 2, 6, 8, 0, 13, 3, 4, 14, 7, 5, 11],
-        [10, 15, 4, 2, 7, 12, 9, 5, 6, 1, 13, 14, 0, 11, 3, 8],
-        [9, 14, 15, 5, 2, 8, 12, 3, 7, 0, 4, 10, 1, 13, 11, 6],
-        [4, 3, 2, 12, 9, 5, 15, 10, 11, 14, 1, 7, 6, 0, 8, 13]]
-
-sbox7 = [[4, 11, 2, 14, 15, 0, 8, 13, 3, 12, 9, 7, 5, 10, 6, 1],
-        [13, 0, 11, 7, 4, 9, 1, 10, 14, 3, 5, 12, 2, 15, 8, 6],
-        [1, 4, 11, 13, 12, 3, 7, 14, 10, 15, 6, 8, 0, 5, 9, 2],
-        [6, 11, 13, 8, 1, 4, 10, 7, 9, 5, 0, 15, 14, 2, 3, 12]]
-
-sbox8 = [[13, 2, 8, 4, 6, 15, 11, 1, 10, 9, 3, 14, 5, 0, 12, 7],
-        [1, 15, 13, 8, 10, 3, 7, 4, 12, 5, 6, 11, 0, 14, 9, 2],
-        [7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8],
-        [2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]]
 
 # this is a helper function that takes in 6 bit segments and outputs
 # what coordinate of the s-box it is associated with 
@@ -389,199 +346,6 @@ def encrypted_message(final_sbox_segments):
     return encrypted_message_final   
 
 
-
-
-#####################################
-############ DECRYPTION #############
-#####################################
-
-
-# first we need to create a function to invert our s-boxes, as the first step will be inserting our
-# cypher text back through these s-boxes
-def invert_s_box(s_box):
-        inverse_s_box = [[0] * len(s_box[0]) for _ in range(len(s_box))]
-
-        # Iterate through each row and column of the S-box
-        for row_index in range(len(s_box)):
-            for col_index in range(len(s_box[row_index])):
-                # The value in the S-box tells us the column of the inverse S-box
-                value = s_box[row_index][col_index]
-                inverse_s_box[row_index][value] = col_index
-        
-        return inverse_s_box
-
-sbox1_invt = invert_s_box(sbox1)
-sbox2_invt = invert_s_box(sbox2)
-sbox3_invt = invert_s_box(sbox3)
-sbox4_invt = invert_s_box(sbox4)
-sbox5_invt = invert_s_box(sbox5)
-sbox6_invt = invert_s_box(sbox6)
-sbox7_invt = invert_s_box(sbox7)
-sbox8_invt = invert_s_box(sbox8)
-
-#storing our inverted s_boxes in a list for easy access
-inverse_sboxes = [sbox1_invt, sbox2_invt, sbox3_invt,sbox4_invt,sbox5_invt,sbox6_invt,sbox7_invt,sbox8_invt]
-
-#now, we insert our cypher text back through the inverse s-boxes, this is supposed to undo the shuffling
-# caused by them and transofrm each 4bit segment to a 6bit segment
-# essentially, we are using the previous output of the sbox to locate the previous coordinates
-# however, since multiple coordinates coorispond to the same value in our original sbox
-# there are multiple possibilities that this function can output.
-# it would be impossible to figure out which one is correct, so for simplicity i have chosen a random one
-# HOWEVER THIS IS MEANS THAT THE DECRYPTION WILL NOT WORK
-#This is a flaw with this encryption model we used from the document, and therefore is not able to be decrypted
-# by running the cypher text back through the algorithm
-def inverse_sbox_segment(sbox, sbox_output):
-    bin_to_dec = int(sbox_output, 2)
-    for row in range(4):
-        for col in range(16):
-            if sbox[row][col] == bin_to_dec:
-                row_bin = f'{row:02b}'
-                col_bin = f'{col:04b}'
-                input_value = row_bin[0] + col_bin + row_bin[1]
-                return input_value  
-
-#here we run each 4 bit segment through our inverse sboxes utilixing the above function
-def four_bit_segments_through_sboxes(segments):
-    six_bit_segs = []
-    for seg in segments:
-        segs_lists = []
-        for piece in seg:
-            split_segment = [piece[i:i+4] for i in range(0, len(piece), 4)]
-            sbox_num = 0
-            sbox_list = []
-            for split in split_segment:
-                sbox = inverse_sboxes[sbox_num]
-                x = inverse_sbox_segment(sbox, split)
-                sbox_list += [x]
-            segs_lists += [sbox_list]
-        six_bit_segs += [segs_lists]
-    return six_bit_segs
-
-# here, we simply combine out 6 bit segments into 48 bit segments
-def six_bit_segs_to_fourty_eight(segments):
-    for i in range(len(segments)):
-        for j in range(len(segments[i])):
-            six_bit = ''.join(segments[i][j])
-            segments[i][j] = six_bit
-    return segments
-
-#here, we use an inverse expansion table to tranform out 48 bit segments back into their
-#32 bit segments. This simply works by mapping them back to their original positions
-def inverse_expansion(expanded_list):
-    inverse_expansion_table = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 
-    17, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29, 30,
-    0, 7, 8, 15, 16, 23, 24, 31]
-
-    inv_exp_seg = []
-    for i in expanded_list:
-        result = []
-        for expanded_data in i:
-            original_data = ['0'] * len(inverse_expansion_table)
-            for i, original_pos in enumerate(inverse_expansion_table):
-                original_data[original_pos] = expanded_data[i]
-            result += [''.join(original_data)]
-        inv_exp_seg += [result]
-    return inv_exp_seg
-
-
-
-
-##########################################
-############ EXTRA FUNCTIONS #############
-##########################################
-
-# this is a helper function that takes in a binary string and converts
-# it to ascii
-def bin_to_text(binary_str):
-    
-    ascii_text = ""
-    
-    for i in range(0, len(binary_str), 8):
-        byte = binary_str[i:i+8]  
-        ascii_char = chr(int(byte, 2)) 
-        ascii_text += ascii_char
-    return ascii_text
-
-
-###############################
-############ MAIN #############
-###############################
-
-quit_option = "c"
-#continues to run until a user quits the program
-while quit_option != "q":
-
-    #taking input
-    user = input("user: ")
-    key = input("key (use your email): ")
-    text_input = input("text to encrypt: ")
-
-    #key generation
-    hash_gen = hash_generation(key)
-    print('\nHashed Key: ', hash_gen)
-    hash_seg = hash_segmentation(hash_gen)
-    print('\nSegmented Hash Key: ',hash_seg)
-    perm = permutations(hash_seg)
-    print('\nPermutated Hash Key: ',perm)
-
-
-    #message processing
-    split_256 = split_input_text_into_256_bit_blocks(text_input)
-    print('\nInput Text 256 bit blocks: ',perm)
-    hash_seg_inp = hash_segmentation_input(split_256)
-    print('\nInput Text 256 bit segmented blocks: ',perm)
-    perm_inp = permutation_input(hash_seg_inp)
-    print('\n Permutated Input Text blocks: ',perm)
-    
-
-    #xoring 48 bit segments and segmenting them to 6 bit segments
-    key_exp = key_expansion(perm)
-    print('\nExpanded Key Segments: ',key_exp)
-    expan = expansion(perm_inp)
-    print('\nExpanded Input Segments: ',expan)
-    xor_segs = xor_segments(key_exp, expan)
-    print('\n XORed Key and Text Segments: ',xor_segs)
-    forty_eight_to_six = fortyeight_to_six_segs(xor_segs)
-    print('\n XORed Segments, 6 bit Segments: ',forty_eight_to_six)
-
-    # running the 6 bit segments through s-boxes
-    s_box_complete = s_box_func(forty_eight_to_six)
-    print('\nAfter running through S-Boxes: ',s_box_complete)
-
-    # formatting the final encrypted message
-    final_encryption = encrypted_message(s_box_complete)
-    cipher_text = bin_to_text(final_encryption)
-    print('\nEncrypted text: ', cipher_text)
-
-    #running the cipher text back through the inverse sboxes (4 bit segments to 6 bit segments)
-    four_bits_through_sboxes = four_bit_segments_through_sboxes(s_box_complete)
-    print('\nCreate Four Bit Segments then Run back through Inverse S-Boxes: ', four_bits_through_sboxes)
-
-    #merging the six bit segments into 48 bit segments
-    six_fourty_eight = six_bit_segs_to_fourty_eight(four_bits_through_sboxes)
-    print('\nSix_to_Fourty_Eight: ', six_fourty_eight)
-
-    #XORing these segments back with the key to get the original segments
-    xor_segs = xor_segments(key_exp, six_fourty_eight)
-    print('\nXORed Key and Decryption Segments: ',xor_segs)
-
-    #Inverse expanding the segments (shrink them) by putting bits back to their original spots
-    inv_exp = inverse_expansion(xor_segs)
-    print('\nInverse Expanded Segments: ',inv_exp)
-
-    #Running these segments through the IP^-1 tables (inverse permutation tables) to undo the scrambling
-    inv_perm = permutation_input(inv_exp, 'yes')
-    print('\n Permutated Input Text blocks: ', inv_perm)
-
-    #formatting and printing the final decrypted message
-    #again this will be wrong because of our issue with the s boxes
-    final_decryption = encrypted_message(inv_perm)
-    plain_text = bin_to_text(final_decryption)
-    print('\nDecrypted text: ', plain_text)
-
-    #option for user to quit or continue program
-    quit_option = input("press q to quit function: ")
 
 
 
