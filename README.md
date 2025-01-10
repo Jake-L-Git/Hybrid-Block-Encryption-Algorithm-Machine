@@ -4,7 +4,7 @@ I have created an application that takes in a user's name, a chosen key, and a m
 <br/>
 <br/>
 <p align="center">
-<img width="400" alt="Screenshot 2025-01-10 at 3 50 14 PM" src="https://github.com/user-attachments/assets/87cb0e63-ae5c-45a5-81f3-258800a357d9" />
+<img width="450" alt="Screenshot 2025-01-10 at 4 43 42 PM" src="https://github.com/user-attachments/assets/f6c56920-7310-43e2-bb43-0f43aebbc064" />
 </p>
 
 # Launching Application
@@ -33,7 +33,8 @@ brew install python-tk
 
 
 # Outline of Encryption Algorithm
-
+The encryption algorithm being used can be roughly broken up into 3 main steps: Key Generation, Message Processing, and Encryption. They are outlined below.
+<br/>
 <h3>Key Generation:</h3>
 Each user will have their own, unique permutation table stored, allowing each user to generate unique keys based on their chosen input key (recommended to use their email).
 <p align="center">
@@ -60,7 +61,7 @@ Then encryption occurs, involving the key and the message, resulting in a string
 
 
 # Decryption
-
+Lastly, for the structure of the encryption algorithm that this project was based on, decryption is not possible. This has to do with the the sbox step on encryption, and essentially because of the randomness of how it is implemented, to "unscramble" this section it would require an expensive brute force algorithm that ultimately would not be possible to implement. I have attached a text file of what a decription algorithm typically would look like, however, the chances of this accurately decrypting is very, very, very, very, very, very low, hence why this machine only includes encryption. If created with a different encryption algorithm, a **similar** decryption algorithm could be used. 
 
 
 
