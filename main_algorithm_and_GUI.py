@@ -121,7 +121,7 @@ class encryption_gui:
         self.output_text.insert(tk.END, f'Segmented Xor Blocks', "even_title")
         self.output_text.insert(tk.END, f'{forty_eight_to_six}\n', "even")
 
-        # running through s-boxes
+        # running through s-box
         s_box_complete = s_box_func(forty_eight_to_six)
         self.output_text.insert(tk.END, f'Segmented Xor Blocks Through S-Boxes', "odd_title")
         self.output_text.insert(tk.END, f'{s_box_complete}\n', "odd")
