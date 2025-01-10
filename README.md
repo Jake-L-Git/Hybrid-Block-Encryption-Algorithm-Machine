@@ -1,7 +1,7 @@
 # Hybrid-Block-Encryption-Algorithm-Machine
 This project involves implementing a given encryption and decryption algorithm, ensuring secure message transmission between users. 
 I have created an application that takes in a user's name, a chosen key, and a message, and displays the steps/processes of encryption, as well as the final encryption method.
-This project was constructed with a series of function that utilize many loops, including many nested loops, as well as many large lists. This allows us to very clearly follow the process of the encryption step by step. 
+This project was constructed with a series of function that utilize many loops, including many nested loops, as well as many large lists. This allows us to very clearly follow the process of the encryption step by step (despite not being the most efficient implementation). 
 <br/>
 <br/>
 <p align="center">
