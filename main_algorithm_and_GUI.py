@@ -5,8 +5,11 @@ from tkinter import scrolledtext
 from encryption import *
 from helper_functions import *
 
+#for gui creation
 class encryption_gui:
     def __init__(self, root):
+        
+        #creating base window 
         self.root = root
         self.root.title("Encryption Machine")
         self.root.geometry("800x675")
@@ -14,28 +17,34 @@ class encryption_gui:
         self.root.configure(bg="#5c5c5c")
 
 
-        # User input fields
+        # creating the user input fields
+
+        # user's name input label and box
         tk.Label(root, text="User:", bg="#5c5c5c", fg="white", font=("Helvetica", 16)).pack()
         self.user_entry = tk.Entry(root, highlightbackground="#5c5c5c")
         self.user_entry.pack()
 
-
+        #user's key input label and box
         tk.Label(root, text="Key (use your email):", bg="#5c5c5c", fg="white", font=("Helvetica", 16)).pack()
         self.key_entry = tk.Entry(root, highlightbackground="#5c5c5c")
         self.key_entry.pack()
 
+        # user's message input label and box
         tk.Label(root, text="Text to encrypt:", bg="#5c5c5c", fg="white", font=("Helvetica", 16)).pack()
         self.text_entry = tk.Entry(root, width=80, highlightbackground="#5c5c5c")
         self.text_entry.pack()
 
-        # Output display area
-        self.output_frame = tk.Frame(root, height=20, bg="#5c5c5c")  # adding margin
-        self.output_frame.pack(pady=10)  # adding margin
+        # output box margin
+        self.output_frame = tk.Frame(root, height=20, bg="#5c5c5c") 
+        self.output_frame.pack(pady=10)
+
+        # output box
         self.output_text = scrolledtext.ScrolledText(
             root, width=80, height=20, bg="#d9fffe", font=("Courier", 12)
         )
         self.output_text.pack()
         
+        # stylistic tags for output box text
         self.output_text.tag_configure("odd", foreground="green", font=("Courier", 12))
         self.output_text.tag_configure("odd_title", foreground="green", font=("Courier", 12, "bold"))
         self.output_text.tag_configure("even", foreground="blue", font=("Courier", 12))
@@ -45,26 +54,33 @@ class encryption_gui:
 
 
 
-        # Buttons
+        # button creation
+
+        # encrypt button
         self.encrypt_button = tk.Button(root, text="Encrypt", highlightbackground="#5c5c5c", font=("Helvetica", 16), command=self.run_encryption, activeforeground="green")
         self.encrypt_button.pack(pady=7)
 
+        #clear button
         self.clear_button = tk.Button(root, text="Clear", highlightbackground="#5c5c5c", font=("Helvetica", 16), command=self.clear_fields, activeforeground="blue")
         self.clear_button.pack(pady=7)
 
+        # show users button
         self.users_button = tk.Button(root, text="Show Users", highlightbackground="#5c5c5c", font=("Helvetica", 16), command=self.show_users, activeforeground="yellow")
         self.users_button.pack(pady=7)
 
+        #quit botton
         self.quit_button = tk.Button(root, text="Quit", highlightbackground="#5c5c5c", font=("Helvetica", 16), command=root.quit, activeforeground="red")
         self.quit_button.pack(pady=7)
 
+    #function invoked by clear fields button - function clears all input/output fields in the GUI
     def clear_fields(self):
-        # Clear all fields
+        
         self.user_entry.delete(0, tk.END)
         self.key_entry.delete(0, tk.END)
         self.text_entry.delete(0, tk.END)
         self.output_text.delete(1.0, tk.END)
     
+    #function invoked by show users button - function clears all input/output fields in the GUI, and outputs the stored users
     def show_users(self):
         # Clear all fields
         self.user_entry.delete(0, tk.END)
@@ -75,14 +91,19 @@ class encryption_gui:
             self.output_text.insert(tk.END, f'{key}\n')
 
 
-
+    #function invoked by the encrypt button - function runs the encryption algorithm based on the input, and displays the steps in the output box
     def run_encryption(self):
-        # Clear previous output
+        
+        # clears the previous outpit
         self.output_text.delete(1.0, tk.END)
-        # Get user inputs
+       
+       # stores user input
         user = self.user_entry.get()
         key = self.key_entry.get()
         text_input = self.text_entry.get()
+
+        #the below steps run the functions in order from the encryption.py file, and after each step
+        #the result it outputed to the output box of the GUI
 
         # key generation
         hash_gen = hash_generation(key)
@@ -132,7 +153,7 @@ class encryption_gui:
         self.output_text.insert(tk.END, f'Encrypted text:\n', "answer_title")
         self.output_text.insert(tk.END, cipher_text, "answer")
 
-# Main execution
+# main 
 if __name__ == "__main__":
     root = tk.Tk()
     app = encryption_gui(root)
